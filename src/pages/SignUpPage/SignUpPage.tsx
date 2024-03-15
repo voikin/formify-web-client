@@ -21,7 +21,6 @@ export const SignUpPage: React.FC = () => {
 
 	const registerMutation = useMutation(
 		(formData: { email: string; username: string; password: string }) => {
-			console.log(formData)
 			return useAuthStore
 				.getState()
 				.register(formData.email, formData.username, formData.password)

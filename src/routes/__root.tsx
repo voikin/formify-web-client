@@ -1,7 +1,7 @@
 import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { useEffect } from 'react'
-import { Spinner, Center, Flex, Text, Button } from '@chakra-ui/react'
+import { Spinner, Center, Flex, Text, Button, Container, Badge } from '@chakra-ui/react'
 import useAuthStore from '../stores/authStore'
 import { useQuery } from 'react-query'
 import { EmailIcon } from '@chakra-ui/icons'
@@ -28,7 +28,15 @@ const RootPage: React.FC = () => {
 
 	return (
 		<>
-			<Flex py={4} px={16} gap={8} alignItems='center'>
+			<Flex py={4} px={16} gap={8} alignItems='center' style={{
+				borderRadius: "0 0 20px 20px",
+				boxShadow: "rgba(0, 0, 0, 0.3) 0px 0px 10px 0px",
+				position: 'sticky',
+				top: 0,
+				zIndex: 1000,
+				backgroundColor: "#fff"
+			}}>
+				<Badge variant='outline' colorScheme='teal'>formify</Badge>
 				<Link to='/'>
 					<Button size='sm'>Домашняя страница</Button>
 				</Link>
@@ -53,13 +61,21 @@ const RootPage: React.FC = () => {
 					</Button>
 				)}
 				{isAuth && (
+					<Link to='/form'>
+						<Button size='sm' colorScheme='teal'>
+							Создать форму
+						</Button>
+					</Link>
+				)}
+				{isAuth && (
 					<Button size='sm' onClick={() => logout()} colorScheme='teal'>
 						Выйти
 					</Button>
 				)}
 			</Flex>
-			<hr />
-			<Outlet />
+			<Container maxW='100%' width='100%' px="200px" py='16px'>
+				<Outlet />
+			</Container>
 			<TanStackRouterDevtools />
 		</>
 	)

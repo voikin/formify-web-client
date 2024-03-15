@@ -20,7 +20,6 @@ export const LoginPage = () => {
 
 	const loginMutation = useMutation(
 		(formData: { email: string; password: string }) => {
-			console.log(formData)
 			return useAuthStore.getState().login(formData.email, formData.password)
 		},
 		{
@@ -37,8 +36,6 @@ export const LoginPage = () => {
 				})
 			},
 			onError: (data) => {
-				console.log(data)
-
 				toast({
 					title: 'Ошибка авторизации',
 					description: 'Failed to register. Please try again later.',

@@ -38,7 +38,6 @@ const useAuthStore = create<AuthState>((set) => ({
 		const response = await axios.get<AuthResponse>(`${API_URL}auth/refresh`, {
 			withCredentials: true,
 		})
-		console.log(response)
 		localStorage.setItem('access_token', response.data.access_token)
 		set({ isAuth: true })
 		set({ user: response.data.user })
