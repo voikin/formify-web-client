@@ -5,7 +5,7 @@ import { CreateFormResponse, FormsResponse, GetFormResponse, ResultsResponse } f
 
 export default class FormService {
     static async create(form: Form): Promise<AxiosResponse<CreateFormResponse>> {
-        return $api.post('api/form/create', { form })
+        return $api.post('api/form', { form })
     }
 
     static async get(testId: string): Promise<AxiosResponse<GetFormResponse>> {
@@ -22,5 +22,9 @@ export default class FormService {
 
     static async deleteTest(testId: string) {
         return $api.delete(`api/form/${testId}`)
+    }
+
+    static async updateTest(form: Form): Promise<AxiosResponse<CreateFormResponse>> {
+        return $api.patch('api/form', form)
     }
 }

@@ -1,43 +1,70 @@
 import { useState } from "react";
 import { Form, Question, QuestionType } from "../../../models/Form";
-import { Box, Button, Checkbox, CheckboxGroup, CloseButton, Flex, FormControl, FormLabel, Grid, GridItem, HStack, Input, Select, Stack, Textarea, VStack, useToast } from "@chakra-ui/react";
-import { useMutation } from "react-query";
+import { Box, Button, Center, Checkbox, CheckboxGroup, CloseButton, Flex, FormControl, FormLabel, Grid, GridItem, HStack, Input, Select, Spinner, Stack, Textarea, VStack, useToast } from "@chakra-ui/react";
+import { useMutation, useQuery } from "react-query";
 import FormService from "../../../services/FormService";
 import { useNavigate } from "@tanstack/react-router";
 import { copyFormAdress } from "../../../utils";
 
-export const FormCreator: React.FC = () => {
+type FormCreatorProps = {
+    formId?: string
+}
+
+export const FormCreator: React.FC<FormCreatorProps> = ({ formId }) => {
     const toast = useToast()
     const navigate = useNavigate()
     const [form, setForm] = useState<Form>({ title: "", questions: [] });
-    const formMutation = useMutation(FormService.create, {
-        onSuccess: ({ data }) => {
-            const toastId = toast({
-                title: `Форма ${data.id} успешно сохранена`,
-                description: (
-                    <Flex justify="center" pt='4px'>
-                        <Button onClick={() => {
-                            copyFormAdress(data.id)
-                            toast.close(toastId)
-                        }} size='sm'>Скопировать адресс формы</Button>
-                    </Flex>
-                ),
-                status: 'success',
-                isClosable: true,
-            })
-            navigate({
-                to: '/',
-            })
-        },
-        onError: err => {
-            toast({
-                title: 'Ошибка',
-                description: 'Не получилось сохранить форму',
-                status: 'error',
-                isClosable: true,
-            })
+
+    const { isLoading: isFormLoading } = useQuery(
+        ['fetchForm', formId],
+        () => FormService.get(formId!),
+        {
+            enabled: !!formId,
+            onSuccess: (data) => setForm(data.data),
+            onError: _ => {
+                toast({
+                    title: 'Ошибка',
+                    description: 'Не получилось запросить форму',
+                    status: 'error',
+                    isClosable: true,
+                })
+                navigate({
+                    to: '/',
+                })
+            }
         }
-    })
+    );
+
+    const formMutation = useMutation(
+        formId ? FormService.updateTest : FormService.create,
+        {
+            onSuccess: ({ data }) => {
+                const toastId = toast({
+                    title: `Форма ${data.id} успешно сохранена`,
+                    description: (
+                        <Flex justify="center" pt='4px'>
+                            <Button onClick={() => {
+                                copyFormAdress(data.id)
+                                toast.close(toastId)
+                            }} size='sm'>Скопировать адресс формы</Button>
+                        </Flex>
+                    ),
+                    status: 'success',
+                    isClosable: true,
+                })
+                navigate({
+                    to: '/',
+                })
+            },
+            onError: _ => {
+                toast({
+                    title: 'Ошибка',
+                    description: 'Не получилось сохранить форму',
+                    status: 'error',
+                    isClosable: true,
+                })
+            }
+        })
 
     const addQuestion = () => {
         const newIndex = form.questions.length + 1
@@ -88,8 +115,20 @@ export const FormCreator: React.FC = () => {
     };
 
     const saveForm = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        event.preventDefault()
-        formMutation.mutate(form)
+        event.preventDefault();
+        if (formId) {
+            formMutation.mutate({ ...form, id: formId });
+        } else {
+            formMutation.mutate(form);
+        }
+    };
+
+    if (formId && isFormLoading) {
+        return (
+            <Center>
+                <Spinner size='xl' />
+            </Center>
+        )
     }
 
     return (

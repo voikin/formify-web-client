@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Form } from '../../models/Form'
 import { HStack, VStack, Text, Button, Tooltip, CloseButton, useToast } from '@chakra-ui/react'
-import { ArrowRightIcon, CloseIcon, CopyIcon } from '@chakra-ui/icons'
+import { ArrowRightIcon, CloseIcon, CopyIcon, EditIcon } from '@chakra-ui/icons'
 import { copyFormAdress } from '../../utils'
 import { useNavigate } from '@tanstack/react-router'
 import { useMutation } from 'react-query'
@@ -46,6 +46,9 @@ const TestList: React.FC<TestListProps> = ({ tests, invalidateTests }) => {
         deleteTestMutation.mutate({ testId })
     }
 
+    console.log(tests);
+    
+
     return (
         <VStack width='100%'>
             {tests.map(test => (
@@ -59,6 +62,11 @@ const TestList: React.FC<TestListProps> = ({ tests, invalidateTests }) => {
                         </Text>
                     </VStack>
                     <HStack>
+                        <Tooltip label='Редактировать тест'>
+                            <Button onClick={() => navigate({ to: `/editTest/$testId`, params: { testId: test.id || '' } })}>
+                                <EditIcon />
+                            </Button>
+                        </Tooltip>
                         <Tooltip label='Скопировать ссылку'>
                             <Button onClick={() => copyFormAdress(test.id || '')} >
                                 <CopyIcon />
