@@ -17,7 +17,7 @@ export default class FormService {
     }
 
     static async getTests(): Promise<AxiosResponse<FormsResponse>> {
-        return $api.get('api/tests')
+        return $api.get('api/form')
     }
 
     static async deleteTest(testId: string) {
@@ -25,6 +25,6 @@ export default class FormService {
     }
 
     static async updateTest(form: Form): Promise<AxiosResponse<CreateFormResponse>> {
-        return $api.patch('api/form', form)
+        return $api.put('api/form', form)
     }
 }

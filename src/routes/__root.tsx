@@ -1,5 +1,4 @@
 import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { useEffect } from 'react'
 import { Spinner, Center, Flex, Text, Button, Container, Badge } from '@chakra-ui/react'
 import useAuthStore from '../stores/authStore'
@@ -75,8 +74,7 @@ const RootPage: React.FC = () => {
 			</Flex>
 			<Container maxW='100%' width='100%' px="200px" py='16px'>
 				<Outlet />
-			</Container>
-			<TanStackRouterDevtools />
+			</Container>	
 		</>
 	)
 }

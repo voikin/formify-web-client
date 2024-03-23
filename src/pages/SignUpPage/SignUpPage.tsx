@@ -20,10 +20,10 @@ export const SignUpPage: React.FC = () => {
 	const toast = useToast()
 
 	const registerMutation = useMutation(
-		(formData: { email: string; username: string; password: string }) => {
+		(formData: { email: string; name: string; password: string }) => {
 			return useAuthStore
 				.getState()
-				.register(formData.email, formData.username, formData.password)
+				.register(formData.email, formData.name, formData.password)
 		},
 		{
 			onSuccess: () => {
@@ -51,7 +51,7 @@ export const SignUpPage: React.FC = () => {
 	)
 
 	const [email, setEmail] = useState('')
-	const [username, setUsername] = useState('')
+	const [name, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 	const [confirmPassword, setConfirmPassword] = useState('')
 
@@ -61,7 +61,7 @@ export const SignUpPage: React.FC = () => {
 
 	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
-		registerMutation.mutate({ email, username, password })
+		registerMutation.mutate({ email, name, password })
 	}
 
 	return (
@@ -76,10 +76,10 @@ export const SignUpPage: React.FC = () => {
 							onChange={(e) => setEmail(e.target.value)}
 						/>
 					</FormControl>
-					<FormControl id='username' isRequired>
+					<FormControl id='name' isRequired>
 						<FormLabel>Username</FormLabel>
 						<Input
-							value={username}
+							value={name}
 							onChange={(e) => setUsername(e.target.value)}
 						/>
 					</FormControl>
