@@ -9,7 +9,7 @@ interface AuthState {
 	user: User | null
 	isAuth: boolean
 	login: (email: string, password: string) => Promise<void>
-	register: (email: string, username: string, password: string) => Promise<void>
+	register: (email: string, name: string, password: string) => Promise<void>
 	logout: () => Promise<void>
 	checkAuth: () => Promise<void>
 }
@@ -23,8 +23,8 @@ const useAuthStore = create<AuthState>((set) => ({
 		const { user } = response.data
 		set({ user, isAuth: true })
 	},
-	register: async (email: string, username: string, password: string) => {
-		const response = await AuthService.registration(email, username, password)
+	register: async (email: string, name: string, password: string) => {
+		const response = await AuthService.registration(email, name, password)
 		localStorage.setItem('access_token', response.data.access_token)
 		const { user } = response.data
 		set({ user, isAuth: true })
